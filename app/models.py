@@ -8,6 +8,7 @@ from flask import current_app, request, url_for
 from flask_login import UserMixin, AnonymousUserMixin
 from . import login_manager
 from . import db
+from .exceptions import ValidationError
 
 
 class Permission:
@@ -207,7 +208,7 @@ class User(UserMixin, db.Model):
         return self.followed.filter_by(
             followed_id=user.id).first() is not None
 
-    # 判断是否被某用户关注    
+    # 判断是否被某用户关注
     def is_followed_by(self, user):
         return self.followers.filter_by(
             follower_id=user.id).first() is not None
@@ -308,6 +309,7 @@ class Post(db.Model):
             raise ValidationError('post does not have a body')
         return Post(body=body)
 
+
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
@@ -335,5 +337,3 @@ class Comment(db.Model):
         if body is None or body == '':
             raise ValidationError('comment does not have a body')
         return Comment(body=body)
-
-    

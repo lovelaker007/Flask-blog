@@ -1,9 +1,13 @@
 #!/usr/bin/env python
+# coding: utf-8
+
+
 import os
-from app import create_app, db
-from app.models import User, Role, Post
 from flask_script import Manager, Shell
 from flask_migrate import Migrate, MigrateCommand
+from app import create_app, db
+from app.models import User, Role, Post
+
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -24,9 +28,9 @@ def test():
     unittest.TextTestRunner(verbosity=2).run(tests)
 
 
+# 用于部署的命令
 @manager.command
 def deploy():
-    """Run deployment tasks."""
     from flask_migrate import upgrade
     from app.models import Role, User
 
